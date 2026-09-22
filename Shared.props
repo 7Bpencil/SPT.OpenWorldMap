@@ -1,0 +1,25 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>7Bpencil</Authors>
+    <Copyright>Copyright (c) 7Bpencil 2026</Copyright>
+    <AssemblyName>7Bpencil.OpenWorld</AssemblyName>
+    <AssemblyVersion>0.0.1</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+    <SPTPath>..\..\..\SPT41\Escape from Tarkov</SPTPath>
+  </PropertyGroup>
+
+  <Target Name="CopyToSPT" AfterTargets="AfterBuild">
+    <Exec Command="mkdir &quot;$(OutPath)&quot;" ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutPath)" />
+  </Target>
+
+  <Target Name="CopyToStage" AfterTargets="AfterBuild" Condition="'$(Configuration)'=='Release'">
+    <Exec Command="mkdir &quot;$(StagePath)&quot;" ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(StagePath)" />
+  </Target>
+
+</Project>

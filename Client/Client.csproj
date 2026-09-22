@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\Shared.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>disable</Nullable>
+    <OutPath>$(SPTPath)\BepInEx\plugins\7Bpencil.OpenWorld</OutPath>
+    <StagePath>..\Stage\BepInEx\plugins\7Bpencil.OpenWorld</StagePath>
+    <AssemblySearchPaths>
+      $(AssemblySearchPaths);
+      $(SPTPath)\EscapeFromTarkov_Data\Managed;
+      $(SPTPath)\BepInEx\core;
+      $(SPTPath)\BepInEx\plugins\spt;
+    </AssemblySearchPaths>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony" />
+    <Reference Include="spt-common" />
+    <Reference Include="spt-reflection" />
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="BepInEx" />
+    <Reference Include="Comfort" />
+    <Reference Include="Comfort.Unity" />
+    <Reference Include="CommonExtensions" />
+    <Reference Include="Newtonsoft.Json" />
+    <Reference Include="Sirenix.Serialization" />
+    <Reference Include="Unity.TextMeshPro" />
+    <Reference Include="UnityEngine" />
+    <Reference Include="UnityEngine.AudioModule" />
+    <Reference Include="UnityEngine.AssetBundleModule" />
+    <Reference Include="UnityEngine.CoreModule" />
+    <Reference Include="UnityEngine.IMGUIModule" />
+    <Reference Include="UnityEngine.InputLegacyModule" />
+    <Reference Include="UnityEngine.ImageConversionModule" />
+    <Reference Include="UnityEngine.TextRenderingModule" />
+    <Reference Include="UnityEngine.PhysicsModule" />
+    <Reference Include="UnityEngine.UI" />
+    <Reference Include="UnityEngine.UnityWebRequestModule" />
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule" />
+    <Reference Include="UnityEngine.VideoModule" />
+  </ItemGroup>
+
+</Project>
