@@ -1,0 +1,396 @@
+{
+  "Assets/Content/Locations/Custom/custom_background.unity": {
+    "SBG_Custom_Background": [
+      [
+        2,
+        0,
+        0
+      ],
+      [
+        2,
+        0,
+        4
+      ],
+      [
+        2,
+        0,
+        5
+      ],
+      [
+        2,
+        0,
+        6
+      ],
+      [
+        2,
+        0,
+        7
+      ],
+      [
+        2,
+        0,
+        3
+      ],
+      [
+        2,
+        2,
+        76
+      ],
+      [
+        2,
+        2,
+        77
+      ],
+      [
+        2,
+        2,
+        45
+      ],
+      [
+        2,
+        2,
+        46
+      ],
+      [
+        2,
+        2,
+        47
+      ],
+      [
+        2,
+        2,
+        50
+      ],
+      [
+        2,
+        2,
+        49
+      ],
+      [
+        2,
+        2,
+        7
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Shopping_Mall/Shopping_Mall_2.unity": {
+    "Background_ShoppingMall": [
+      [
+        0,
+        0
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Woods/woods_combined.unity": {
+    "SBG_Woods_Combined": [
+      [
+        2,
+        0,
+        6
+      ],
+      [
+        2,
+        0,
+        2,
+        3
+      ],
+      [
+        2,
+        0,
+        2,
+        24
+      ],
+      [
+        2,
+        0,
+        2,
+        0
+      ]
+    ]
+  },
+  "Assets/Content/Locations/shorline/Shoreline_North.unity": {
+    "SBG_Shoreline_North": [
+      [
+        2,
+        1,
+        11
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Lighthouse/Lighthouse_Background.unity": {
+    "SBG_Lighthouse_Background": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3,
+        1
+      ]
+    ],
+    "Mount_01_LOD": [
+      []
+    ]
+  },
+  "Assets/Content/Locations/Reserve_Base/Reserve_Base_outside_BLOCK_10.unity": {
+    "SBG_Reserve_Base_outside_BLOCK_10": [
+      [
+        2,
+        0,
+        0
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Woods/woods_terrain.unity": {
+    "Slice_2_2_LOD": [
+      []
+    ],
+    "Slice_3_3_LOD": [
+      []
+    ],
+    "TEMP!!! Slice_2_2_LOD (2)": [
+      []
+    ],
+    "TEMP!!! Slice_1_4_LOD (4)": [
+      []
+    ],
+    "Slice_3_4_LOD": [
+      []
+    ],
+    "TEMP!!! Slice_2_2_LOD (1)": [
+      []
+    ]
+  },
+  "Assets/Content/Locations/Custom/custom_Terrain.unity": {
+    "terrain": [
+      [
+        1
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ]
+    ]
+  },
+  "Assets/Content/Locations/shorline/shoreline_Terrain.unity": {
+    "Slice_3_4_LIGHTHOUSE_LOD.generated": [
+      []
+    ],
+    "Slice_3_5_LIGHTHOUSE_LOD.generated": [
+      []
+    ],
+    "Slice_4_5_LIGHTHOUSE_LOD.generated": [
+      []
+    ],
+    "Slice_4_2_LOD.generated": [
+      []
+    ],
+    "Slice_4_3": [
+      []
+    ]
+  },
+  "Assets/Content/Locations/Reserve_Base/Reserve_Base_outside_BLOCK_11.unity": {
+    "SBG_Reserve_Base_outside_BLOCK_11": [
+      [
+        2,
+        1,
+        8,
+        15
+      ],
+      [
+        2,
+        1,
+        8,
+        14
+      ],
+      [
+        2,
+        1,
+        8,
+        13
+      ],
+      [
+        2,
+        1,
+        8,
+        11
+      ],
+      [
+        2,
+        1,
+        8,
+        0
+      ],
+      [
+        2,
+        1,
+        8,
+        10
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Custom/custom_multiScene.unity": {
+    "SBG_Custom_multiScene": [
+      [
+        2,
+        13,
+        80,
+        0
+      ],
+      [
+        2,
+        13,
+        80,
+        6
+      ],
+      [
+        2,
+        13,
+        80,
+        2
+      ],
+      [
+        2,
+        13,
+        22,
+        50
+      ],
+      [
+        2,
+        13,
+        22,
+        51
+      ],
+      [
+        2,
+        13,
+        22,
+        49
+      ],
+      [
+        2,
+        13,
+        80,
+        4
+      ],
+      [
+        2,
+        13,
+        80,
+        1
+      ],
+      [
+        2,
+        13,
+        50,
+        125
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Reserve_Base/Reserve_Base_MilitaryDorms.unity": {
+    "SBG_Reserve_Base_MilitaryDorms": [
+      [
+        2,
+        2,
+        3,
+        3,
+        2
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Sandbox/Sandbox_Areas/Sandbox_background_01.unity": {
+    "SBG_Sandbox_background_01": [
+      [
+        2,
+        1,
+        1
+      ],
+      [
+        2,
+        1,
+        2
+      ],
+      [
+        2,
+        1,
+        5
+      ],
+      [
+        2,
+        1,
+        61
+      ],
+      [
+        2,
+        1,
+        83
+      ],
+      [
+        2,
+        1,
+        82
+      ],
+      [
+        2,
+        1,
+        81
+      ],
+      [
+        2,
+        1,
+        80
+      ],
+      [
+        2,
+        1,
+        41
+      ],
+      [
+        2,
+        1,
+        40
+      ]
+    ]
+  },
+  "Assets/Content/Locations/City/City_Areas/City_SE_06/City_SE_06_buildings_back.unity": {
+    "SBG_City_SE_06_buildings_back": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        10
+      ],
+      [
+        0,
+        0,
+        11
+      ],
+      [
+        0,
+        0,
+        14
+      ],
+      [
+        0,
+        0,
+        15
+      ],
+      [
+        1
+      ]
+    ]
+  }
+}
