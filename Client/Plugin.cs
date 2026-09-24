@@ -66,6 +66,7 @@ public class Plugin : BaseUnityPlugin
 
 	private Dictionary<string, MapData> Maps = new()
 	{
+		{ "56f40101d2720b2a4d8b45d6", new(GetCustomsScenes(), new(0, 0, 0)) },
 		{ "5704e5fad2720bc05b8b4567", new(GetReserveScenes(), new(802.4879f, 0, 477.2278f)) },
 		{ "5704e4dad2720bb55b8b4567", new(GetLighthouseScenes(), new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f)) },
 		{ "5704e554d2720bac5b8b456e", new(GetShorelineScenes(), new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f)) },
@@ -337,6 +338,42 @@ public class Plugin : BaseUnityPlugin
 				}
 			}
 		}
+	}
+
+	private static HashSet<string> GetCustomsScenes()
+	{
+		return new()
+		{
+			// Assets/Content/Locations/Custom/custom_Scripts.unity,
+			// Assets/Content/Locations/Custom/custom_Terrain.unity,
+			// Assets/Content/Locations/Custom/custom_mazuto.unity,
+			// Assets/Content/Locations/Custom/custom_Garage.unity,
+			// Assets/Content/Locations/Custom/custom_Tamozhnya.unity,
+			// Assets/Content/Locations/Custom/custom_TrailerPark.unity,
+			// Assets/Content/Locations/Custom/custom_factoryStorageZone.unity,
+			// Assets/Content/Locations/Custom/custom_Obshezhitie.unity,
+			// Assets/Content/Locations/Custom/custom_Obshezhitie_1_indoor.unity,
+			// Assets/Content/Locations/Custom/custom_Obshezhitie_2_indoor.unity,
+			// Assets/Content/Locations/Custom/custom_AZS.unity,
+			// Assets/Content/Locations/Custom/custom_city.unity,
+			// Assets/Content/Locations/Custom/custom_multiScene.unity,
+			// Assets/Content/Locations/Custom/custom_Road.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Abandoned_Lab.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Abandoned_Plant.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_ChemicalFactory.unity,
+			// Assets/Content/Locations/Custom/custom_AZS_old.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_Construction_Factory.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Pump_Station.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_RepairBox.unity,
+			// Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_Expansion.unity,
+			// Assets/Content/Locations/Custom/custom_background.unity,
+			// Assets/Content/Locations/Custom/custom_Light.unity,
+			// Assets/Content/Locations/Custom/custom_DesignStuff.unity,
+			// Assets/Content/Locations/Custom/custom_DesignMain.unity,
+			// Assets/Content/Locations/Custom/custom_AI.unity,
+			// Assets/Content/Locations/Custom/Custom_Sound.unity,
+			// Assets/Content/Locations/Custom/custom_Culling.unity,
+		};
 	}
 
 	private static HashSet<string> GetReserveScenes()
