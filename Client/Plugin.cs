@@ -31,6 +31,8 @@ using UnityEngine.SceneManagement;
 using JsonType;
 using GPUInstancer;
 
+// TODO dont use path for idetifying scenes
+
 // Customs           56f40101d2720b2a4d8b45d6 path=maps/customs_preset.bundle       rcid=bigmap.scenespreset.asset
 // Arena             56db0b3bd2720bb0678b4567 path=maps/develop_preset.bundle       rcid=develop.scenespreset.asset
 // Factory           55f2d3fd4bdc2d5f408b4567 path=maps/factory_day_preset.bundle   rcid=factory_day.scenespreset.asset
@@ -59,6 +61,9 @@ public record MapData
 	Vector3 Offset
 );
 
+// TODO make custom location with scenes from customs and woods to test if it fixes trees
+// TODO port matsix clouds to 4.1 just for the vid
+
 [BepInPlugin("7Bpencil.OpenWorld", "7Bpencil.OpenWorld", "0.0.1")]
 public class Plugin : BaseUnityPlugin
 {
@@ -66,7 +71,7 @@ public class Plugin : BaseUnityPlugin
 
 	private Dictionary<string, MapData> Maps = new()
 	{
-		{ "56f40101d2720b2a4d8b45d6", new(GetCustomsScenes(), new(0, 0, 0)) },
+		// { "56f40101d2720b2a4d8b45d6", new(GetCustomsScenes(), new(0, 0, 0)) },
 		{ "5704e5fad2720bc05b8b4567", new(GetReserveScenes(), new(802.4879f, 0, 477.2278f)) },
 		{ "5704e4dad2720bb55b8b4567", new(GetLighthouseScenes(), new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f)) },
 		{ "5704e554d2720bac5b8b456e", new(GetShorelineScenes(), new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f)) },
@@ -81,7 +86,9 @@ public class Plugin : BaseUnityPlugin
 	public Dictionary<string, Dictionary<string, List<List<int>>>> DisabledObjectsData;
 	public HashSet<Transform> DisabledObjects;
 
-	private void Awake()
+	public ScenesPreset OpenWorldScenesPreset;
+
+    private void Awake()
 	{
 		Instance = this;
 
@@ -91,11 +98,74 @@ public class Plugin : BaseUnityPlugin
 		DisabledObjectsData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, List<List<int>>>>>(dataJson);
 		DisabledObjects = new();
 
-		new Patch_AudioCullingController_StartWorkCoroutine().Enable();
+		// add our map to AvailableMaps array, otherwise there wont
+		// be day/night time selection on map screen
+
+		var oldLocations = LocationSettings.Location.AvailableMaps;
+		var newLocations = new string[oldLocations.Length + 1];
+		Array.Copy(oldLocations, newLocations, oldLocations.Length);
+		newLocations[oldLocations.Length] = "7bpencil.openworld";
+
+		typeof(LocationSettings.Location)
+			.GetField(nameof(LocationSettings.Location.AvailableMaps), BindingFlags.Static | BindingFlags.Public)
+			.SetValue(null, newLocations);
+
+		OpenWorldScenesPreset = ScriptableObject.CreateInstance<ScenesPreset>();
+		OpenWorldScenesPreset.ChildPresets = [];
+
+		string[] scenes =
+		[
+			"Assets/Content/Locations/Custom/custom_Scripts.unity",
+			"Assets/Content/Locations/Custom/custom_Terrain.unity",
+			"Assets/Content/Locations/Custom/custom_mazuto.unity",
+			"Assets/Content/Locations/Custom/custom_Garage.unity",
+			"Assets/Content/Locations/Custom/custom_Tamozhnya.unity",
+			"Assets/Content/Locations/Custom/custom_TrailerPark.unity",
+			"Assets/Content/Locations/Custom/custom_factoryStorageZone.unity",
+			"Assets/Content/Locations/Custom/custom_Obshezhitie.unity",
+			"Assets/Content/Locations/Custom/custom_Obshezhitie_1_indoor.unity",
+			"Assets/Content/Locations/Custom/custom_Obshezhitie_2_indoor.unity",
+			"Assets/Content/Locations/Custom/custom_AZS.unity",
+			"Assets/Content/Locations/Custom/custom_city.unity",
+			"Assets/Content/Locations/Custom/custom_multiScene.unity",
+			"Assets/Content/Locations/Custom/custom_Road.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Abandoned_Lab.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Abandoned_Plant.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_ChemicalFactory.unity",
+			"Assets/Content/Locations/Custom/custom_AZS_old.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_Construction_Factory.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Pump_Station.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_RepairBox.unity",
+			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_Expansion.unity",
+			"Assets/Content/Locations/Custom/custom_background.unity",
+			"Assets/Content/Locations/Custom/custom_Light.unity",
+			"Assets/Content/Locations/Custom/custom_DesignStuff.unity",
+			"Assets/Content/Locations/Custom/custom_DesignMain.unity",
+			"Assets/Content/Locations/Custom/custom_AI.unity",
+			"Assets/Content/Locations/Custom/Custom_Sound.unity",
+			"Assets/Content/Locations/Custom/custom_Culling.unity",
+		];
+
+		OpenWorldScenesPreset._scenesResourceKeys = ConvertScenesList(scenes);
+
+		// new Patch_AudioCullingController_StartWorkCoroutine().Enable();
 		// new Patch_WeatherController_method_4().Enable();
-		new Patch_SpatialAudioSystem_LateUpdate().Enable();
-		new Patch_SpatialAudioSystem_Update().Enable();
-		new Patch_GPUInstancerDetailManager_GenerateCellsInstanceDataFromTerrain().Enable();
+		// new Patch_SpatialAudioSystem_LateUpdate().Enable();
+		// new Patch_SpatialAudioSystem_Update().Enable();
+		// new Patch_GPUInstancerDetailManager_GenerateCellsInstanceDataFromTerrain().Enable();
+		new Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync().Enable();
+	}
+
+	// this works only for vanilla scenes,
+	// custom scenes can have different path and rcid
+	public static List<SceneResourceKey> ConvertScenesList(string[] scenes)
+	{
+		var result = new List<SceneResourceKey>(scenes.Length);
+		foreach (var scene in scenes)
+		{
+			result.Add(new() { path = scene, rcid = scene });
+		}
+		return result;
 	}
 
 	public void AddDisabledObject(GameObject go)
@@ -911,5 +981,46 @@ public class Patch_GPUInstancerDetailManager_GenerateCellsInstanceDataFromTerrai
     public static bool Prefix()
 	{
 		return false;
+	}
+}
+
+public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : ModulePatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return AccessTools.Method(typeof(LoadScenesFromPresetOperation), nameof(LoadScenesFromPresetOperation.LoadPresetFromConfigAsync));
+    }
+
+    [PatchPrefix]
+    public static bool Prefix(ref Task __result, LoadScenesFromPresetOperation __instance, ScenePresetLoadConfig preset)
+	{
+		if (preset.key.path == "maps/7bpencil_openworld_preset.bundle")
+		{
+			__result = Mine(__instance, preset);
+			return false;
+		}
+
+		return true;
+	}
+
+	// copy-paste of original method, but instead of loading bundle that contains scriptable object
+	// with list of scenes, we pass our own list without all the bundle bullshit
+	public static async Task Mine(LoadScenesFromPresetOperation __instance, ScenePresetLoadConfig preset)
+	{
+		__instance._scenesLoaded = 0f;
+		__instance._progress?.Report(0f);
+
+		var scenesPreset = Plugin.Instance.OpenWorldScenesPreset;
+
+		scenesPreset.DisableServerScenes(preset.DisableServerScenes);
+		__instance._totalScenesToLoad = scenesPreset.ScenesResourceKeys.Length;
+		__instance._progress = __instance._progress.Select(delegate(float x)
+		{
+			__instance._scenesLoaded += x;
+			__instance._scenesLoaded = Mathf.Clamp(__instance._scenesLoaded, 0f, __instance._totalScenesToLoad);
+			return __instance._scenesLoaded / (float)__instance._totalScenesToLoad;
+		});
+
+		await __instance.LoadPresetAsync(scenesPreset);
 	}
 }
