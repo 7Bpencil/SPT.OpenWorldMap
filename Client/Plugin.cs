@@ -5,9 +5,12 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+using Audio;
 using Audio.AudioCulling;
 using Audio.SpatialSystem;
+using Audio.SpatialSystem.Data;
 using BepInEx;
+using Comfort.Common;
 using Diz.Utils;
 using EFT;
 using EFT.AssetsManager;
@@ -116,45 +119,21 @@ public class Plugin : BaseUnityPlugin
 
 		string[] scenes =
 		[
-			"Assets/Content/Locations/Custom/custom_Scripts.unity",
-			"Assets/Content/Locations/Custom/custom_Terrain.unity",
-			"Assets/Content/Locations/Custom/custom_mazuto.unity",
-			"Assets/Content/Locations/Custom/custom_Garage.unity",
-			"Assets/Content/Locations/Custom/custom_Tamozhnya.unity",
-			"Assets/Content/Locations/Custom/custom_TrailerPark.unity",
-			"Assets/Content/Locations/Custom/custom_factoryStorageZone.unity",
-			"Assets/Content/Locations/Custom/custom_Obshezhitie.unity",
-			"Assets/Content/Locations/Custom/custom_Obshezhitie_1_indoor.unity",
-			"Assets/Content/Locations/Custom/custom_Obshezhitie_2_indoor.unity",
-			"Assets/Content/Locations/Custom/custom_AZS.unity",
-			"Assets/Content/Locations/Custom/custom_city.unity",
-			"Assets/Content/Locations/Custom/custom_multiScene.unity",
-			"Assets/Content/Locations/Custom/custom_Road.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Abandoned_Lab.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Abandoned_Plant.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_ChemicalFactory.unity",
-			"Assets/Content/Locations/Custom/custom_AZS_old.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_Construction_Factory.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/custom_Pump_Station.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_RepairBox.unity",
-			"Assets/Content/Locations/Custom/Custom_Expansion_Temp/Custom_Expansion.unity",
-			"Assets/Content/Locations/Custom/custom_background.unity",
-			"Assets/Content/Locations/Custom/custom_Light.unity",
-			"Assets/Content/Locations/Custom/custom_DesignStuff.unity",
-			"Assets/Content/Locations/Custom/custom_DesignMain.unity",
-			"Assets/Content/Locations/Custom/custom_AI.unity",
-			"Assets/Content/Locations/Custom/Custom_Sound.unity",
-			"Assets/Content/Locations/Custom/custom_Culling.unity",
+			"Assets/Content/Locations/Woods/woods_Scripts.unity",
+			"Assets/Content/Locations/Woods/woods_terrain.unity",
+			"Assets/Content/Locations/Woods/woods_combined.unity",
+			// "Assets/Content/Locations/Woods/woods_light.unity",
+			// "Assets/Content/Locations/Woods/woods_design_stuff.unity",
+			"Assets/Content/Locations/Woods/woods_DesignMain.unity",
+			"Assets/Content/Locations/Woods/woods_AI.unity",
+			"Assets/Content/Locations/Woods/Woods_Sound.unity",
+			// "Assets/Content/Locations/Woods/woods_Culling.unity",
 		];
 
 		OpenWorldScenesPreset._scenesResourceKeys = ConvertScenesList(scenes);
 
-		// new Patch_AudioCullingController_StartWorkCoroutine().Enable();
-		// new Patch_WeatherController_method_4().Enable();
-		// new Patch_SpatialAudioSystem_LateUpdate().Enable();
-		// new Patch_SpatialAudioSystem_Update().Enable();
-		// new Patch_GPUInstancerDetailManager_GenerateCellsInstanceDataFromTerrain().Enable();
 		new Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync().Enable();
+		new Patch_BotDoorsController_RefreshData().Enable();
 	}
 
 	// this works only for vanilla scenes,
@@ -936,76 +915,6 @@ public class Plugin : BaseUnityPlugin
 	}
 }
 
-public class Patch_AudioCullingController_StartWorkCoroutine : ModulePatch
-{
-    protected override MethodBase GetTargetMethod()
-    {
-        return AccessTools.Method(typeof(AudioCullingController), nameof(AudioCullingController.StartWorkCoroutine));
-    }
-
-    [PatchPrefix]
-    public static bool Prefix()
-	{
-		return false;
-	}
-}
-
-public class Patch_WeatherController_method_4 : ModulePatch
-{
-    protected override MethodBase GetTargetMethod()
-    {
-        return AccessTools.Method(typeof(WeatherController), nameof(WeatherController.method_4));
-    }
-
-    [PatchPrefix]
-    public static bool Prefix()
-	{
-		return false;
-	}
-}
-
-public class Patch_SpatialAudioSystem_LateUpdate : ModulePatch
-{
-    protected override MethodBase GetTargetMethod()
-    {
-        return AccessTools.Method(typeof(SpatialAudioSystem), nameof(SpatialAudioSystem.LateUpdate));
-    }
-
-    [PatchPrefix]
-    public static bool Prefix()
-	{
-		return false;
-	}
-}
-
-public class Patch_SpatialAudioSystem_Update : ModulePatch
-{
-    protected override MethodBase GetTargetMethod()
-    {
-        return AccessTools.Method(typeof(SpatialAudioSystem), nameof(SpatialAudioSystem.Update));
-    }
-
-    [PatchPrefix]
-    public static bool Prefix()
-	{
-		return false;
-	}
-}
-
-public class Patch_GPUInstancerDetailManager_GenerateCellsInstanceDataFromTerrain : ModulePatch
-{
-    protected override MethodBase GetTargetMethod()
-    {
-        return AccessTools.Method(typeof(GPUInstancerDetailManager), nameof(GPUInstancerDetailManager.GenerateCellsInstanceDataFromTerrain));
-    }
-
-    [PatchPrefix]
-    public static bool Prefix()
-	{
-		return false;
-	}
-}
-
 public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : ModulePatch
 {
     protected override MethodBase GetTargetMethod()
@@ -1044,5 +953,19 @@ public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : Mod
 		});
 
 		await __instance.LoadPresetAsync(scenesPreset);
+	}
+}
+
+public class Patch_BotDoorsController_RefreshData : ModulePatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return AccessTools.Method(typeof(BotDoorsController), nameof(BotDoorsController.RefreshData));
+    }
+
+    [PatchPrefix]
+    public static bool Prefix()
+	{
+		return false;
 	}
 }
