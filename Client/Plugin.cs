@@ -31,25 +31,25 @@ using UnityEngine.SceneManagement;
 using JsonType;
 using GPUInstancer;
 
-// 56f40101d2720b2a4d8b45d6 Customs
-// 56db0b3bd2720bb0678b4567 Arena
-// 55f2d3fd4bdc2d5f408b4567 Factory
-// 59fc81d786f774390775787e Factory
-// 599319c986f7740dca3070a6 Hideout
-// 5714dbc024597771384a510d Interchange
-// 5b0fc42d86f7744a585f9105 Laboratory
-// 5704e4dad2720bb55b8b4567 Lighthouse
-// 5704e64ad2720bb55b8b456e Private Sector
-// 5704e5fad2720bc05b8b4567 ReserveBase
-// 5704e554d2720bac5b8b456e Shoreline
-// 5714dc342459777137212e0b Suburbs
-// 5714dc692459777137212e12 Streets of Tarkov
-// 6733700029c367a3d40b02af Labyrinth
-// 5704e5a4d2720bb45b8b4567 Terminal
-// 5704e47ed2720bb35b8b4568 Town
-// 5704e3c2d2720bac5b8b4567 Woods
-// 653e6760052c01c1c805532f Sandbox
-// 65b8d6f5cdde2479cb2a3125 Sandbox
+// Customs           56f40101d2720b2a4d8b45d6 path=maps/customs_preset.bundle       rcid=bigmap.scenespreset.asset
+// Arena             56db0b3bd2720bb0678b4567 path=maps/develop_preset.bundle       rcid=develop.scenespreset.asset
+// Factory           55f2d3fd4bdc2d5f408b4567 path=maps/factory_day_preset.bundle   rcid=factory_day.scenespreset.asset
+// Factory           59fc81d786f774390775787e path=maps/factory_night_preset.bundle rcid=factory_night.scenespreset.asset
+// Hideout           599319c986f7740dca3070a6 path=maps/bunker_preset.bundle        rcid=bunker.ScenesPreset.asset
+// Interchange       5714dbc024597771384a510d path=maps/shopping_mall.bundle        rcid=Shopping_Mall.ScenesPreset.asset
+// Laboratory        5b0fc42d86f7744a585f9105 path=maps/laboratory_preset.bundle    rcid=laboratory.ScenesPreset.asset
+// Lighthouse        5704e4dad2720bb55b8b4567 path=maps/lighthouse_preset.bundle    rcid=lighthouse.scenespreset.asset
+// Private Sector    5704e64ad2720bb55b8b456e path=                                 rcid=
+// ReserveBase       5704e5fad2720bc05b8b4567 path=maps/rezerv_base_preset.bundle   rcid=Rezerv_Base.scenespreset.asset
+// Shoreline         5704e554d2720bac5b8b456e path=maps/shoreline_preset.bundle     rcid=shoreline.scenespreset.asset
+// Suburbs           5714dc342459777137212e0b path=                                 rcid=
+// Streets of Tarkov 5714dc692459777137212e12 path=maps/city_preset.bundle          rcid=city.scenespreset.asset
+// Labyrinth         6733700029c367a3d40b02af path=maps/labyrinth_preset.bundle     rcid=Labyrinth.scenespreset.asset
+// Terminal          5704e5a4d2720bb45b8b4567 path=                                 rcid=
+// Town              5704e47ed2720bb35b8b4568 path=                                 rcid=
+// Woods             5704e3c2d2720bac5b8b4567 path=maps/woods_preset.bundle         rcid=woods.scenespreset.asset
+// Sandbox           653e6760052c01c1c805532f path=maps/sandbox_preset.bundle       rcid=sandbox.scenespreset.asset
+// Sandbox           65b8d6f5cdde2479cb2a3125 path=maps/sandbox_high_preset.bundle  rcid=sandbox_high.scenespreset.asset
 
 namespace SevenBoldPencil.OpenWorld;
 
@@ -191,6 +191,10 @@ public class Plugin : BaseUnityPlugin
 		return null;
 	}
 
+	public const int longNameLength = 17; // "Streets of Tarkov"
+	public const int longPathLength = 32; // "maps/factory_night_preset.bundle"
+	public const int longRcidLength = 32; // "factory_night.scenespreset.asset"
+
 	public void DumpMaps()
 	{
 		if (TarkovApplication.Exist(out var tarkovApplication))
@@ -198,7 +202,7 @@ public class Plugin : BaseUnityPlugin
 			var locations = tarkovApplication.Session.LocationSettings.locations;
 			foreach (var (id, location) in locations)
 			{
-				Logger.LogWarning($"{id} {location.Name}");
+				Logger.LogWarning($"{location.Name,-longNameLength} {id} path={location.Scene.path,-longPathLength} rcid={location.Scene.rcid,-longRcidLength}");
 			}
         }
 	}
