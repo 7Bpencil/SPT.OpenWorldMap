@@ -71,6 +71,7 @@ public class Plugin : BaseUnityPlugin
 
 	private Dictionary<string, MapData> Maps = new()
 	{
+		{ "55f2d3fd4bdc2d5f408b4567", new(GetFactoryScenes(), new(0, 0, 0)) },
 		// { "56f40101d2720b2a4d8b45d6", new(GetCustomsScenes(), new(0, 0, 0)) },
 		{ "5704e5fad2720bc05b8b4567", new(GetReserveScenes(), new(802.4879f, 0, 477.2278f)) },
 		{ "5704e4dad2720bb55b8b4567", new(GetLighthouseScenes(), new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f)) },
@@ -408,6 +409,27 @@ public class Plugin : BaseUnityPlugin
 				}
 			}
 		}
+	}
+
+	private static HashSet<string> GetFactoryScenes()
+	{
+		return new()
+		{
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Day_Scripts.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Day_Light.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Areas.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Main_Building.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Basement.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Admin_Office.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Laboratory.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Background.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_DesignStuff.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_DesignMain.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_AI.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Sound_Rework.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Quests.unity",
+			// "Assets/Content/Locations/Factory_Rework/Factory_Rework_Day_Culling.unity",
+		};
 	}
 
 	private static HashSet<string> GetCustomsScenes()
