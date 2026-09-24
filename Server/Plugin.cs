@@ -101,8 +101,8 @@ public class Plugin(
                 IdField = MapId,
                 Scene = new()
                 {
-                   Path = "maps/customs_preset.bundle",
-                   Rcid = "bigmap.scenespreset.asset"
+                   Path = "maps/7bpencil_openworld_preset.bundle",
+                   Rcid = "7bpencil.openworld.ScenesPreset.asset"
                 },
                 Enabled = true,
                 IconX = -10,

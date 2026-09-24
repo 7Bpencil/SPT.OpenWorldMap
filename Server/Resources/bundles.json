@@ -1,0 +1,10 @@
+{
+  "manifest": [
+    {
+      "key": "maps/7bpencil_openworld_preset.bundle",
+      "dependencyKeys": [
+
+      ]
+    }
+  ]
+}
