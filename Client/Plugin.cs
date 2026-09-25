@@ -33,6 +33,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using JsonType;
 using GPUInstancer;
+using Koenigz.PerfectCulling.EFT;
 
 // TODO dont use path for idetifying scenes
 
@@ -72,15 +73,18 @@ public class Plugin : BaseUnityPlugin
 {
 	public static Plugin Instance;
 
+	// WoodsOffset, I first got all offsets relative to Customs, but Woods is easier to work with
+	private static readonly Vector3 WO = new(-899.999f, 0f, 799.9879f);
+
 	private Dictionary<string, MapData> Maps = new()
 	{
 		{ "55f2d3fd4bdc2d5f408b4567", new(GetFactoryScenes(), new(0, 0, 0)) },
-		// { "56f40101d2720b2a4d8b45d6", new(GetCustomsScenes(), new(0, 0, 0)) },
-		{ "5704e5fad2720bc05b8b4567", new(GetReserveScenes(), new(802.4879f, 0, 477.2278f)) },
-		{ "5704e4dad2720bb55b8b4567", new(GetLighthouseScenes(), new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f)) },
-		{ "5704e554d2720bac5b8b456e", new(GetShorelineScenes(), new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f)) },
-		{ "5714dbc024597771384a510d", new(GetInterchangeScenes(), new Vector3(-596.6475f, 19.7394f, -740.3831f) - new Vector3(13.1f, 21.43f, -54.5f)) },
-		{ "5704e3c2d2720bac5b8b4567", new(GetWoodsScenes(), new(899.999f, 0f, -799.9879f)) },
+		{ "56f40101d2720b2a4d8b45d6", new(GetCustomsScenes(), WO) },
+		{ "5704e5fad2720bc05b8b4567", new(GetReserveScenes(), new Vector3(802.4879f, 0, 477.2278f) + WO) },
+		{ "5704e4dad2720bb55b8b4567", new(GetLighthouseScenes(), new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f) + WO) },
+		{ "5704e554d2720bac5b8b456e", new(GetShorelineScenes(), new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f) + WO) },
+		{ "5714dbc024597771384a510d", new(GetInterchangeScenes(), new Vector3(-596.6475f, 19.7394f, -740.3831f) - new Vector3(13.1f, 21.43f, -54.5f) + WO) },
+		{ "5704e3c2d2720bac5b8b4567", new(GetWoodsScenes(), new(0, 0, 0)) },
 		{ "5714dc692459777137212e12", new(GetStreetsScenes(), new Vector3(-840.5616f, 5.0597f, -2238.547f) - new Vector3(-57.7054f, 5.0597f, 581.6671f)) },
 		{ "65b8d6f5cdde2479cb2a3125", new(GetGroundZeroScenes(), new Vector3(-1782.518f, -15.2285f, -2785.837f)) },
 	};
@@ -89,6 +93,7 @@ public class Plugin : BaseUnityPlugin
 
 	public Dictionary<string, Dictionary<string, List<List<int>>>> DisabledObjectsData;
 	public HashSet<Transform> DisabledObjects;
+	public Dictionary<string, Vector3> SceneOffsetTable;
 
 	public ScenesPreset OpenWorldScenesPreset;
 
@@ -101,6 +106,14 @@ public class Plugin : BaseUnityPlugin
 		var dataJson = File.ReadAllText(DisabledObjectsDataPath);
 		DisabledObjectsData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, List<List<int>>>>>(dataJson);
 		DisabledObjects = new();
+		SceneOffsetTable = new();
+		foreach (var mapData in Maps.Values)
+		{
+			foreach (var scene in mapData.AllowedScenes)
+			{
+				SceneOffsetTable.Add(scene, mapData.Offset);
+			}
+		}
 
 		// add our map to AvailableMaps array, otherwise there wont
 		// be day/night time selection on map screen
@@ -117,11 +130,14 @@ public class Plugin : BaseUnityPlugin
 		OpenWorldScenesPreset = ScriptableObject.CreateInstance<ScenesPreset>();
 		OpenWorldScenesPreset.ChildPresets = [];
 
-		string[] scenes =
+		string[] start =
 		[
 			"Assets/Content/Locations/Woods/woods_Scripts.unity",
 			"Assets/Content/Locations/Woods/woods_terrain.unity",
 			"Assets/Content/Locations/Woods/woods_combined.unity",
+		];
+		string[] end =
+		[
 			// "Assets/Content/Locations/Woods/woods_light.unity",
 			// "Assets/Content/Locations/Woods/woods_design_stuff.unity",
 			"Assets/Content/Locations/Woods/woods_DesignMain.unity",
@@ -129,6 +145,14 @@ public class Plugin : BaseUnityPlugin
 			"Assets/Content/Locations/Woods/Woods_Sound.unity",
 			// "Assets/Content/Locations/Woods/woods_Culling.unity",
 		];
+
+		var scenes = new List<string>();
+		scenes.AddRange(start);
+		scenes.AddRange(GetCustomsScenes());
+		scenes.AddRange(GetReserveScenes());
+		scenes.AddRange(GetLighthouseScenes());
+		scenes.AddRange(GetShorelineScenes());
+		scenes.AddRange(end);
 
 		OpenWorldScenesPreset._scenesResourceKeys = ConvertScenesList(scenes);
 
@@ -138,9 +162,9 @@ public class Plugin : BaseUnityPlugin
 
 	// this works only for vanilla scenes,
 	// custom scenes can have different path and rcid
-	public static List<SceneResourceKey> ConvertScenesList(string[] scenes)
+	public static List<SceneResourceKey> ConvertScenesList(List<string> scenes)
 	{
-		var result = new List<SceneResourceKey>(scenes.Length);
+		var result = new List<SceneResourceKey>(scenes.Count);
 		foreach (var scene in scenes)
 		{
 			result.Add(new() { path = scene, rcid = scene });
@@ -229,7 +253,7 @@ public class Plugin : BaseUnityPlugin
 	{
 		if (Input.GetKeyDown(KeyCode.F13))
 		{
-			LoadAll();
+			TweakMaps();
 		}
 	}
 
@@ -266,12 +290,16 @@ public class Plugin : BaseUnityPlugin
 			await LoadAnotherMap(id, data);
 		}
 		Logger.LogError("LOADING DONE!");
+	}
 
-		for (var i = 0; i < 10; i++)
-		{
-			await Task.Yield();
-		}
+	public void TweakMaps()
+	{
+		DisableObjects();
+		MoveScenes();
+	}
 
+	public void DisableObjects()
+	{
 		foreach (var scene in SceneManager.GetAllScenes())
 		{
 			if (!DisabledObjectsData.TryGetValue(scene.path, out var disabledRoots))
@@ -309,6 +337,50 @@ public class Plugin : BaseUnityPlugin
 			}
 		}
 	}
+
+	public void MoveScenes()
+	{
+		foreach (var scene in SceneManager.GetAllScenes())
+		{
+			if (SceneOffsetTable.TryGetValue(scene.path, out var offset))
+			{
+				foreach (var root in scene.GetRootGameObjects())
+				{
+					root.transform.position += offset;
+				}
+			}
+		}
+	}
+
+    public void DisableAllCullingObjects()
+    {
+        foreach (var cullingObject in FindObjectsOfType<DisablerCullingObjectBase>())
+        {
+            if (!cullingObject.HasEntered)
+            {
+	            cullingObject.SetComponentsEnabled(true);
+            }
+        }
+		foreach (var perfectCullingAdaptiveGrid in FindObjectsOfType<PerfectCullingAdaptiveGrid>())
+        {
+            if (perfectCullingAdaptiveGrid.RuntimeGroupMapping.Count > 0)
+            {
+                foreach (var sceneGroup in perfectCullingAdaptiveGrid.RuntimeGroupMapping)
+                {
+                    foreach (var bakeGroup in sceneGroup.bakeGroups)
+                    {
+                        if (!bakeGroup.IsEnabled)
+                        {
+                            bakeGroup.IsEnabled = true;
+                            continue;
+                        }
+                    }
+
+                    sceneGroup.enabled = false;
+                }
+            }
+        }
+    }
 
 	public async Task LoadAnotherMap(string mapId, MapData mapData)
 	{
@@ -374,17 +446,6 @@ public class Plugin : BaseUnityPlugin
 				if (allowedScenes.Contains(scene.path))
 				{
 					await assetsManager.LoadScene(scene, LoadSceneMode.Additive, true);
-				}
-			}
-		}
-
-		foreach (var scene in SceneManager.GetAllScenes())
-		{
-			if (allowedScenes.Contains(scene.path))
-			{
-				foreach (var root in scene.GetRootGameObjects())
-				{
-					root.transform.position += mapData.Offset;
 				}
 			}
 		}
