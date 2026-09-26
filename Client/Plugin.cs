@@ -37,8 +37,6 @@ using JsonType;
 using GPUInstancer;
 using Koenigz.PerfectCulling.EFT;
 
-// TODO dont use path for idetifying scenes
-
 namespace SevenBoldPencil.OpenWorld;
 
 public record MapData
@@ -47,9 +45,7 @@ public record MapData
 	Vector3 Offset
 );
 
-// TODO make custom location with scenes from customs and woods to test if it fixes trees
-// TODO port matsix clouds to 4.1 just for the vid
-// TODO fix floating lighthouse boats:
+// TODO fix floating lighthouse ships:
 // - Lighthouse_Background/SBG_Lighthouse_Background/OO/Lighthouse_ship_Omski
 // - Lighthouse_Background/SBG_Lighthouse_Background/OO/Lighthouse_ship_TowUran
 
@@ -158,6 +154,7 @@ public class Plugin : BaseUnityPlugin
 		return result;
 	}
 
+#if DEBUG
 	public void DisabledObjectsAdd(GameObject go)
 	{
 		go.SetActive(false);
@@ -253,6 +250,7 @@ public class Plugin : BaseUnityPlugin
 
 		return (scenePath, rootPath, result);
 	}
+#endif
 
     private static Transform Find(Transform root, List<int> path)
     {
@@ -269,6 +267,7 @@ public class Plugin : BaseUnityPlugin
         return result;
     }
 
+#if DEBUG
 	public void DisabledObjectsDump()
 	{
         var json = JsonConvert.SerializeObject(DisabledObjectsData);
@@ -309,6 +308,7 @@ public class Plugin : BaseUnityPlugin
 		}
 		Logger.LogError("LOADING DONE!");
 	}
+#endif
 
 	public void TweakMaps()
 	{
@@ -414,6 +414,7 @@ public class Plugin : BaseUnityPlugin
         }
     }
 
+#if DEBUG
 	public async Task LoadAnotherMap(string mapId, MapData mapData)
 	{
 		if (TarkovApplication.Exist(out var tarkovApplication))
@@ -482,6 +483,7 @@ public class Plugin : BaseUnityPlugin
 			}
 		}
 	}
+#endif
 }
 
 public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : ModulePatch
