@@ -323,6 +323,7 @@ public class Plugin : BaseUnityPlugin
 		DisableObjects();
 		MoveScenes();
 		UpdateTreeImpostors();
+		DisableAllCullingObjects();
 	}
 
 	public void DisableObjects()
