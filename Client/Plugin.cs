@@ -52,6 +52,8 @@ public record MapData
 [BepInPlugin("7Bpencil.OpenWorld", "7Bpencil.OpenWorld", "0.0.1")]
 public class Plugin : BaseUnityPlugin
 {
+	public const string MapScenePath = "maps/7bpencil_openworld_preset.bundle";
+
 	public static Plugin Instance;
 
 	// WoodsOffset, I first got all offsets relative to Customs, but Woods is easier to work with
@@ -496,7 +498,7 @@ public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : Mod
     [PatchPrefix]
     public static bool Prefix(ref Task __result, LoadScenesFromPresetOperation __instance, ScenePresetLoadConfig preset)
 	{
-		if (preset.key.path == "maps/7bpencil_openworld_preset.bundle")
+		if (preset.key.path == Plugin.MapScenePath)
 		{
 			__result = Mine(__instance, preset);
 			return false;
@@ -539,6 +541,13 @@ public class Patch_BotDoorsController_RefreshData : ModulePatch
     [PatchPrefix]
     public static bool Prefix()
 	{
-		return false;
+		if (TarkovApplication.Exist(out var tarkovApplication))
+		{
+			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

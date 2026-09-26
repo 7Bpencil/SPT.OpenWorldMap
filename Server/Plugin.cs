@@ -36,6 +36,7 @@ public class Plugin(
     public const string MapName = "Open World";
     public const string MapDescription = "All outdoor maps combined";
     public const string MapBannerId = "6ab52b2c9d8466dceac13e5a";
+	public const string MapScenePath = "maps/7bpencil_openworld_preset.bundle";
 
     public static Plugin Instance;
     public ISptLogger<Plugin> Logger = logger;
@@ -101,8 +102,8 @@ public class Plugin(
                 IdField = MapId,
                 Scene = new()
                 {
-                   Path = "maps/7bpencil_openworld_preset.bundle",
-                   Rcid = "7bpencil.openworld.ScenesPreset.asset"
+                   Path = MapScenePath,
+                   Rcid = ""
                 },
                 Enabled = true,
                 IconX = -10,
