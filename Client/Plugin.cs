@@ -66,8 +66,8 @@ public class Plugin : BaseUnityPlugin
 		{ Scenes.ShorelineId, new(Scenes.Shoreline, new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f) + WO) },
 		{ Scenes.InterchangeId, new(Scenes.Interchange, new Vector3(-596.6475f, 19.7394f, -740.3831f) - new Vector3(13.1f, 21.43f, -54.5f) + WO) },
 		{ Scenes.WoodsId, new(Scenes.Woods, new(0, 0, 0)) },
-		{ Scenes.StreetsId, new(Scenes.Streets, new Vector3(-840.5616f, 5.0597f, -2238.547f) - new Vector3(-57.7054f, 5.0597f, 581.6671f)) },
-		{ Scenes.GroundZeroId, new(Scenes.GroundZero, new Vector3(-1782.518f, -15.2285f, -2785.837f)) },
+		{ Scenes.StreetsId, new(Scenes.Streets, new Vector3(-840.5616f, 5.0597f, -2238.547f) - new Vector3(-57.7054f, 5.0597f, 581.6671f) + WO) },
+		{ Scenes.GroundZeroId, new(Scenes.GroundZero, new Vector3(-1782.518f, -15.2285f, -2785.837f) + WO) },
 	};
 
 	public string DisabledObjectsDataPath;
