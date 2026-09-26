@@ -5,6 +5,108 @@
         2,
         0,
         6
+      ],
+      [
+        2,
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        0,
+        2,
+        5
+      ],
+      [
+        2,
+        0,
+        2,
+        6
+      ],
+      [
+        2,
+        0,
+        2,
+        7
+      ],
+      [
+        2,
+        0,
+        2,
+        8
+      ],
+      [
+        2,
+        0,
+        2,
+        9
+      ],
+      [
+        2,
+        0,
+        2,
+        10
+      ],
+      [
+        2,
+        0,
+        2,
+        11
+      ],
+      [
+        2,
+        0,
+        2,
+        12
+      ],
+      [
+        2,
+        0,
+        2,
+        13
+      ],
+      [
+        2,
+        0,
+        2,
+        14
+      ],
+      [
+        2,
+        0,
+        2,
+        15
+      ],
+      [
+        2,
+        0,
+        2,
+        16
+      ],
+      [
+        2,
+        0,
+        2,
+        17
+      ],
+      [
+        2,
+        0,
+        2,
+        18
+      ],
+      [
+        2,
+        0,
+        2,
+        3
+      ],
+      [
+        2,
+        0,
+        2,
+        24
       ]
     ]
   },
@@ -85,6 +187,311 @@
       ],
       [
         1
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Custom/custom_background.unity": {
+    "SBG_Custom_Background": [
+      [
+        2,
+        0,
+        0
+      ],
+      [
+        2,
+        0,
+        3
+      ],
+      [
+        2,
+        0,
+        4
+      ],
+      [
+        2,
+        0,
+        5
+      ],
+      [
+        2,
+        0,
+        6
+      ],
+      [
+        2,
+        0,
+        7
+      ],
+      [
+        2,
+        2,
+        7
+      ],
+      [
+        2,
+        2,
+        77
+      ],
+      [
+        2,
+        2,
+        76
+      ],
+      [
+        2,
+        2,
+        50
+      ],
+      [
+        2,
+        2,
+        49
+      ],
+      [
+        2,
+        2,
+        47
+      ],
+      [
+        2,
+        2,
+        46
+      ],
+      [
+        2,
+        2,
+        45
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Custom/custom_multiScene.unity": {
+    "SBG_Custom_multiScene": [
+      [
+        2,
+        13,
+        50,
+        125
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Custom/custom_Terrain.unity": {
+    "terrain": [
+      [
+        5
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        1
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Woods/woods_terrain.unity": {
+    "Slice_3_3_LOD": [
+      [
+        -1
+      ]
+    ],
+    "TEMP!!! Slice_2_2_LOD (2)": [
+      [
+        -1
+      ]
+    ],
+    "TEMP!!! Slice_1_4_LOD (4)": [
+      [
+        -1
+      ]
+    ],
+    "Slice_3_4_LOD": [
+      [
+        0
+      ]
+    ],
+    "Slice_2_2_LOD": [
+      [
+        -1
+      ]
+    ],
+    "TEMP!!! Slice_2_2_LOD (1)": [
+      [
+        -1
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Reserve_Base/Reserve_Base_outside_BLOCK_10.unity": {
+    "SBG_Reserve_Base_outside_BLOCK_10": [
+      [
+        2,
+        0,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ]
+  },
+  "Assets/Content/Locations/shorline/Shoreline_North.unity": {
+    "SBG_Shoreline_North": [
+      [
+        2,
+        1,
+        11
+      ],
+      [
+        2,
+        1,
+        9
+      ],
+      [
+        2,
+        1,
+        8
+      ],
+      [
+        2,
+        2,
+        8
+      ],
+      [
+        2,
+        2,
+        10
+      ],
+      [
+        2,
+        2,
+        13
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        1,
+        10
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Lighthouse/Lighthouse_Background.unity": {
+    "Mount_01_LOD": [
+      [
+        -1
+      ]
+    ],
+    "SBG_Lighthouse_Background": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        4,
+        86
+      ],
+      [
+        1,
+        4,
+        134
+      ],
+      [
+        1,
+        4,
+        165
+      ],
+      [
+        1,
+        8
+      ]
+    ]
+  },
+  "Assets/Content/Locations/shorline/shoreline_Terrain.unity": {
+    "Slice_3_4_LIGHTHOUSE_LOD.generated": [
+      [
+        -1
+      ]
+    ],
+    "Slice_3_5_LIGHTHOUSE_LOD.generated": [
+      [
+        -1
+      ]
+    ],
+    "Slice_4_5_LIGHTHOUSE_LOD.generated": [
+      [
+        -1
+      ]
+    ],
+    "Slice_4_2_LOD.generated": [
+      [
+        -1
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Reserve_Base/Reserve_Base_outside_BLOCK_11.unity": {
+    "SBG_Reserve_Base_outside_BLOCK_11": [
+      [
+        2,
+        1,
+        8,
+        10
+      ],
+      [
+        2,
+        1,
+        8,
+        11
+      ],
+      [
+        2,
+        1,
+        8,
+        13
+      ],
+      [
+        2,
+        1,
+        8,
+        15
+      ]
+    ]
+  },
+  "Assets/Content/Locations/shorline/Shoreline_West.unity": {
+    "SBG_ShoreLine_West": [
+      [
+        2,
+        63
+      ],
+      [
+        0,
+        30
+      ]
+    ]
+  },
+  "Assets/Content/Locations/Shopping_Mall/Shopping_Mall_2.unity": {
+    "Background_ShoppingMall": [
+      [
+        0,
+        0
+      ],
+      [
+        4
       ]
     ]
   }
