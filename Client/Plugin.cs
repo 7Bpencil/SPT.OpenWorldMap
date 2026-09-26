@@ -275,14 +275,6 @@ public class Plugin : BaseUnityPlugin
 		File.WriteAllTextAsync(DisabledObjectsDataPath, json);
 	}
 
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.F13))
-		{
-			TweakMaps();
-		}
-	}
-
 	public LocationSettings GetLocationSettings()
 	{
 		if (TarkovApplication.Exist(out var tarkovApplication))
@@ -530,6 +522,8 @@ public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : Mod
 		});
 
 		await __instance.LoadPresetAsync(scenesPreset);
+
+		Plugin.Instance.TweakMaps();
 	}
 }
 
