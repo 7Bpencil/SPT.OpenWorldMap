@@ -38,26 +38,6 @@ using Koenigz.PerfectCulling.EFT;
 
 // TODO dont use path for idetifying scenes
 
-// Customs           56f40101d2720b2a4d8b45d6 path=maps/customs_preset.bundle       rcid=bigmap.scenespreset.asset
-// Arena             56db0b3bd2720bb0678b4567 path=maps/develop_preset.bundle       rcid=develop.scenespreset.asset
-// Factory           55f2d3fd4bdc2d5f408b4567 path=maps/factory_day_preset.bundle   rcid=factory_day.scenespreset.asset
-// Factory           59fc81d786f774390775787e path=maps/factory_night_preset.bundle rcid=factory_night.scenespreset.asset
-// Hideout           599319c986f7740dca3070a6 path=maps/bunker_preset.bundle        rcid=bunker.ScenesPreset.asset
-// Interchange       5714dbc024597771384a510d path=maps/shopping_mall.bundle        rcid=Shopping_Mall.ScenesPreset.asset
-// Laboratory        5b0fc42d86f7744a585f9105 path=maps/laboratory_preset.bundle    rcid=laboratory.ScenesPreset.asset
-// Lighthouse        5704e4dad2720bb55b8b4567 path=maps/lighthouse_preset.bundle    rcid=lighthouse.scenespreset.asset
-// Private Sector    5704e64ad2720bb55b8b456e path=                                 rcid=
-// ReserveBase       5704e5fad2720bc05b8b4567 path=maps/rezerv_base_preset.bundle   rcid=Rezerv_Base.scenespreset.asset
-// Shoreline         5704e554d2720bac5b8b456e path=maps/shoreline_preset.bundle     rcid=shoreline.scenespreset.asset
-// Suburbs           5714dc342459777137212e0b path=                                 rcid=
-// Streets of Tarkov 5714dc692459777137212e12 path=maps/city_preset.bundle          rcid=city.scenespreset.asset
-// Labyrinth         6733700029c367a3d40b02af path=maps/labyrinth_preset.bundle     rcid=Labyrinth.scenespreset.asset
-// Terminal          5704e5a4d2720bb45b8b4567 path=                                 rcid=
-// Town              5704e47ed2720bb35b8b4568 path=                                 rcid=
-// Woods             5704e3c2d2720bac5b8b4567 path=maps/woods_preset.bundle         rcid=woods.scenespreset.asset
-// Sandbox           653e6760052c01c1c805532f path=maps/sandbox_preset.bundle       rcid=sandbox.scenespreset.asset
-// Sandbox           65b8d6f5cdde2479cb2a3125 path=maps/sandbox_high_preset.bundle  rcid=sandbox_high.scenespreset.asset
-
 namespace SevenBoldPencil.OpenWorld;
 
 public record MapData
@@ -79,15 +59,15 @@ public class Plugin : BaseUnityPlugin
 
 	private Dictionary<string, MapData> Maps = new()
 	{
-		{ "55f2d3fd4bdc2d5f408b4567", new(Scenes.Factory, new(0, 0, 0)) },
-		{ "56f40101d2720b2a4d8b45d6", new(Scenes.Customs, WO) },
-		{ "5704e5fad2720bc05b8b4567", new(Scenes.Reserve, new Vector3(802.4879f, 0, 477.2278f) + WO) },
-		{ "5704e4dad2720bb55b8b4567", new(Scenes.Lighthouse, new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f) + WO) },
-		{ "5704e554d2720bac5b8b456e", new(Scenes.Shoreline, new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f) + WO) },
-		{ "5714dbc024597771384a510d", new(Scenes.Interchange, new Vector3(-596.6475f, 19.7394f, -740.3831f) - new Vector3(13.1f, 21.43f, -54.5f) + WO) },
-		{ "5704e3c2d2720bac5b8b4567", new(Scenes.Woods, new(0, 0, 0)) },
-		{ "5714dc692459777137212e12", new(Scenes.Streets, new Vector3(-840.5616f, 5.0597f, -2238.547f) - new Vector3(-57.7054f, 5.0597f, 581.6671f)) },
-		{ "65b8d6f5cdde2479cb2a3125", new(Scenes.GroundZero, new Vector3(-1782.518f, -15.2285f, -2785.837f)) },
+		{ Scenes.FactoryId, new(Scenes.Factory, new(0, 0, 0)) },
+		{ Scenes.CustomsId, new(Scenes.Customs, WO) },
+		{ Scenes.ReserveId, new(Scenes.Reserve, new Vector3(802.4879f, 0, 477.2278f) + WO) },
+		{ Scenes.LighthouseId, new(Scenes.Lighthouse, new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f) + WO) },
+		{ Scenes.ShorelineId, new(Scenes.Shoreline, new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f) + WO) },
+		{ Scenes.InterchangeId, new(Scenes.Interchange, new Vector3(-596.6475f, 19.7394f, -740.3831f) - new Vector3(13.1f, 21.43f, -54.5f) + WO) },
+		{ Scenes.WoodsId, new(Scenes.Woods, new(0, 0, 0)) },
+		{ Scenes.StreetsId, new(Scenes.Streets, new Vector3(-840.5616f, 5.0597f, -2238.547f) - new Vector3(-57.7054f, 5.0597f, 581.6671f)) },
+		{ Scenes.GroundZeroId, new(Scenes.GroundZero, new Vector3(-1782.518f, -15.2285f, -2785.837f)) },
 	};
 
 	public string DisabledObjectsDataPath;
