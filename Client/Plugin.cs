@@ -155,7 +155,7 @@ public class Plugin : BaseUnityPlugin
 		return result;
 	}
 
-	public void AddDisabledObject(GameObject go)
+	public void DisabledObjectsAdd(GameObject go)
 	{
 		go.SetActive(false);
 		var tr = go.transform;
@@ -184,7 +184,7 @@ public class Plugin : BaseUnityPlugin
 		}
 	}
 
-	public void RemoveDisabledObject(GameObject go)
+	public void DisabledObjectsRemove(GameObject go)
 	{
 		go.SetActive(true);
 		var tr = go.transform;
@@ -266,7 +266,7 @@ public class Plugin : BaseUnityPlugin
         return result;
     }
 
-	public void DumpDisabledObjects()
+	public void DisabledObjectsDump()
 	{
         var json = JsonConvert.SerializeObject(DisabledObjectsData, Formatting.Indented);
 		File.WriteAllTextAsync(DisabledObjectsDataPath, json);
