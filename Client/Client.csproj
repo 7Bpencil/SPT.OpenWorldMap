@@ -42,4 +42,12 @@
     <Reference Include="UnityEngine.VideoModule" />
   </ItemGroup>
 
+  <Target Name="CopyBundlesToSPT" AfterTargets="AfterBuild">
+    <Exec Command="xcopy /hievry &quot;$(ProjectDir)data&quot; &quot;$(OutPath)\data&quot;" />
+  </Target>
+
+  <Target Name="CopyBundlesToStage" AfterTargets="AfterBuild" Condition="'$(Configuration)'=='Release'">
+    <Exec Command="xcopy /hievry &quot;$(ProjectDir)data&quot; &quot;$(StagePath)\data&quot;" />
+  </Target>
+
 </Project>
