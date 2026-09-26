@@ -323,6 +323,7 @@ public class Plugin : BaseUnityPlugin
 		DisableObjects();
 		MoveScenes();
 		UpdateTreeImpostors();
+		UpdateGrass();
 		DisableAllCullingObjects();
 	}
 
@@ -377,6 +378,17 @@ public class Plugin : BaseUnityPlugin
 		foreach (var impostorsRenderer in UnityEngine.Object.FindObjectsOfType<ImpostorsRenderer>())
 		{
 			impostorsRenderer.Refresh();
+		}
+	}
+
+	public void UpdateGrass()
+	{
+		foreach (var detailManager in UnityEngine.Object.FindObjectsOfType<GPUInstancerDetailManager>())
+		{
+			if (SceneOffsetTable.TryGetValue(detailManager.gameObject.scene.path, out var offset))
+			{
+				detailManager.SetGlobalPositionOffset(offset);
+			}
 		}
 	}
 
