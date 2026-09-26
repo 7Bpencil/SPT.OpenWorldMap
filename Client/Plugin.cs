@@ -15,6 +15,7 @@ using Diz.Utils;
 using EFT;
 using EFT.AssetsManager;
 using EFT.InventoryLogic;
+using EFT.Impostors;
 using EFT.UI;
 using EFT.Weather;
 using Newtonsoft.Json;
@@ -106,6 +107,7 @@ public class Plugin : BaseUnityPlugin
 		var dataJson = File.ReadAllText(DisabledObjectsDataPath);
 		DisabledObjectsData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, List<List<int>>>>>(dataJson);
 		DisabledObjects = new();
+
 		SceneOffsetTable = new();
 		foreach (var mapData in Maps.Values)
 		{
@@ -138,12 +140,9 @@ public class Plugin : BaseUnityPlugin
 		];
 		string[] end =
 		[
-			// "Assets/Content/Locations/Woods/woods_light.unity",
-			// "Assets/Content/Locations/Woods/woods_design_stuff.unity",
 			"Assets/Content/Locations/Woods/woods_DesignMain.unity",
 			"Assets/Content/Locations/Woods/woods_AI.unity",
 			"Assets/Content/Locations/Woods/Woods_Sound.unity",
-			// "Assets/Content/Locations/Woods/woods_Culling.unity",
 		];
 
 		var scenes = new List<string>();
@@ -296,6 +295,7 @@ public class Plugin : BaseUnityPlugin
 	{
 		DisableObjects();
 		MoveScenes();
+		UpdateTreeImpostors();
 	}
 
 	public void DisableObjects()
@@ -349,6 +349,14 @@ public class Plugin : BaseUnityPlugin
 					root.transform.position += offset;
 				}
 			}
+		}
+	}
+
+	public void UpdateTreeImpostors()
+	{
+		foreach (var impostorsRenderer in UnityEngine.Object.FindObjectsOfType<ImpostorsRenderer>())
+		{
+			impostorsRenderer.Refresh();
 		}
 	}
 
