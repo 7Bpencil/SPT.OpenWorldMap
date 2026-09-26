@@ -49,6 +49,9 @@ public record MapData
 
 // TODO make custom location with scenes from customs and woods to test if it fixes trees
 // TODO port matsix clouds to 4.1 just for the vid
+// TODO fix floating lighthouse boats:
+// - Lighthouse_Background/SBG_Lighthouse_Background/OO/Lighthouse_ship_Omski
+// - Lighthouse_Background/SBG_Lighthouse_Background/OO/Lighthouse_ship_TowUran
 
 [BepInPlugin("7Bpencil.OpenWorld", "7Bpencil.OpenWorld", "0.0.1")]
 public class Plugin : BaseUnityPlugin
