@@ -30,6 +30,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using JsonType;
@@ -156,6 +157,7 @@ public class Plugin : BaseUnityPlugin
 
 	public void AddDisabledObject(GameObject go)
 	{
+		go.SetActive(false);
 		var tr = go.transform;
 		if (DisabledObjects.Add(tr))
 		{
@@ -182,8 +184,37 @@ public class Plugin : BaseUnityPlugin
 		}
 	}
 
-	// why? because some objects have duplicate names and Transform.Find will
-	// return only first occurance
+	public void RemoveDisabledObject(GameObject go)
+	{
+		go.SetActive(true);
+		var tr = go.transform;
+		if (DisabledObjects.Remove(tr))
+		{
+			var (scenePath, rootPath, objectPath) = GetTransformPath(tr);
+			if (DisabledObjectsData.TryGetValue(scenePath, out var oldScene))
+			{
+				if (oldScene.TryGetValue(rootPath, out var oldRoot))
+				{
+					var index = oldRoot.FindIndex(e => e.SequenceEqual(objectPath));
+					if (index != -1)
+					{
+					    oldRoot.RemoveAt(index);
+					}
+					if (oldRoot.Count == 0)
+					{
+						oldScene.Remove(rootPath);
+					}
+					if (oldScene.Count == 0)
+					{
+						DisabledObjectsData.Remove(scenePath);
+					}
+				}
+			}
+		}
+	}
+
+	// why List<int>? because some objects have duplicate names
+	// and Transform.Find will return only first occurance
 	public static (string, string, List<int>) GetTransformPath(Transform tr)
 	{
 		var scenePath = tr.gameObject.scene.path;
@@ -198,17 +229,22 @@ public class Plugin : BaseUnityPlugin
 			{
 				// scene root gameObjects dont have sibling index (its always zero),
 				// they are meant to be identified by name
+				// (but what happens if we have roots with identical names?)
 
 	            result.Add(current.GetSiblingIndex());
 	            current = parent;
 			}
 			else
 			{
-				// btw what happens if we have roots with identical names?
 				rootPath = current.name;
 				break;
 			}
         }
+
+		if (result.Count == 0)
+		{
+			result.Add(-1);
+		}
 
         result.Reverse();
 
@@ -217,6 +253,11 @@ public class Plugin : BaseUnityPlugin
 
     private static Transform Find(Transform root, List<int> path)
     {
+		if (path.Count == 1 && path[0] == -1)
+		{
+			return root;
+		}
+
         var result = root;
         foreach (var index in path)
         {
@@ -295,26 +336,18 @@ public class Plugin : BaseUnityPlugin
 				{
 					continue;
 				}
-				if (disabledGOs.Count == 0)
+				var rootTransform = root.transform;
+				foreach (var path in disabledGOs)
 				{
-					root.SetActive(false);
-					DisabledObjects.Add(root.transform);
-				}
-				else
-				{
-					var rootTransform = root.transform;
-					foreach (var path in disabledGOs)
+					var goTransform = Find(rootTransform, path);
+					if (goTransform)
 					{
-						var goTransform = Find(rootTransform, path);
-						if (goTransform)
-						{
-							goTransform.gameObject.SetActive(false);
-							DisabledObjects.Add(goTransform);
-						}
-						else
-						{
-							Logger.LogError($"NOT FOUND: {scene.path} {root.name} {string.Join(",", path)}");
-						}
+						goTransform.gameObject.SetActive(false);
+						DisabledObjects.Add(goTransform);
+					}
+					else
+					{
+						Logger.LogError($"NOT FOUND: {scene.path} {root.name} {string.Join(",", path)}");
 					}
 				}
 			}
