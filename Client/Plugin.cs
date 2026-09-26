@@ -271,7 +271,7 @@ public class Plugin : BaseUnityPlugin
 
 	public void DisabledObjectsDump()
 	{
-        var json = JsonConvert.SerializeObject(DisabledObjectsData, Formatting.Indented);
+        var json = JsonConvert.SerializeObject(DisabledObjectsData);
 		File.WriteAllTextAsync(DisabledObjectsDataPath, json);
 	}
 
