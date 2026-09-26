@@ -16,7 +16,9 @@ using EFT;
 using EFT.AssetsManager;
 using EFT.InventoryLogic;
 using EFT.Impostors;
+using EFT.Settings.Graphics;
 using EFT.UI;
+using EFT.UI.Settings;
 using EFT.Weather;
 using Newtonsoft.Json;
 using HarmonyLib;
@@ -99,6 +101,13 @@ public class Plugin : BaseUnityPlugin
 			}
 		}
 
+		// patch graphics visibility setting to go to 10k
+
+		var newSettings = Array.AsReadOnly(new float[7] { 400f, 1000f, 1500f, 2000f, 2500f, 3000f, 10000f });
+		typeof(GraphicsSettingsTab)
+			.GetField("_overallVisibilityVariants", BindingFlags.Static | BindingFlags.NonPublic)
+			.SetValue(null, newSettings);
+
 		// add our map to AvailableMaps array, otherwise there wont
 		// be day/night time selection on map screen
 
@@ -140,6 +149,7 @@ public class Plugin : BaseUnityPlugin
 
 		OpenWorldScenesPreset._scenesResourceKeys = ConvertScenesList(scenes);
 
+		new Patch_GraphicsSettingsGroup().Enable();
 		new Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync().Enable();
 		new Patch_BotDoorsController_RefreshData().Enable();
 	}
@@ -486,6 +496,20 @@ public class Plugin : BaseUnityPlugin
 		}
 	}
 #endif
+}
+
+public class Patch_GraphicsSettingsGroup : ModulePatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return AccessTools.Constructor(typeof(GraphicsSettingsGroup), [typeof(GraphicsSettingsController)]);
+    }
+
+    [PatchPostfix]
+	public static void Postfix(GraphicsSettingsGroup __instance)
+	{
+		__instance.OverallVisibility._asyncPreProcessor = value => Task.FromResult(Mathf.Clamp(value, 400f, 10000f));
+	}
 }
 
 public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : ModulePatch
