@@ -5,30 +5,18 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-using Audio;
-using Audio.AudioCulling;
-using Audio.SpatialSystem;
-using Audio.SpatialSystem.Data;
 using BepInEx;
-using Comfort.Common;
 using Diz.Utils;
 using EFT;
-using EFT.AssetsManager;
-using EFT.InventoryLogic;
 using EFT.Impostors;
 using EFT.Settings.Graphics;
-using EFT.UI;
 using EFT.UI.Settings;
-using EFT.Weather;
 using Newtonsoft.Json;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using SPT.Common.Http;
-using SPT.Common.Utils;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

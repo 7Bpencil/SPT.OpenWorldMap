@@ -12,9 +12,6 @@ using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Spt.Config;
 using SPTarkov.Server.Core.Models.Spt.Tables;
-using SPTarkov.Server.Core.Routers;
-using SPTarkov.Server.Core.Utils.Cloners;
-using SPTarkov.Server.Core.Utils;
 
 namespace SevenBoldPencil.OpenWorld;
 
@@ -22,11 +19,7 @@ namespace SevenBoldPencil.OpenWorld;
 public class Plugin(
     LocationTable locationTable,
     LocaleTable localeTable,
-    BotConfig botConfig,
     LocationConfig locationConfig,
-    ICloner cloner,
-    JsonUtil jsonUtil,
-    ImageRouter imageRouter,
     IEnumerable<IRuntimePatch> patches,
     ISptLogger<Plugin> logger
 ) : IOnLoad
