@@ -6,9 +6,12 @@
 //
 
 using BepInEx;
+using BepInEx.Configuration;
 using Diz.Utils;
 using EFT;
+using EFT.GameTriggers;
 using EFT.Impostors;
+using EFT.Interactive;
 using EFT.Settings.Graphics;
 using EFT.UI.Settings;
 using Newtonsoft.Json;
@@ -42,11 +45,10 @@ public record MapData
 [BepInPlugin("7Bpencil.OpenWorld", "7Bpencil.OpenWorld", "0.0.1")]
 public class Plugin : BaseUnityPlugin
 {
+    public const string MapKey = "7bpencil.openworld"; // lowercase is mandatory
 	public const string MapScenePath = "maps/7bpencil_openworld_preset.bundle";
 
-	public static Plugin Instance;
-
-	private Dictionary<string, MapData> Maps = new()
+	private static Dictionary<string, MapData> Maps = new()
 	{
 		{ Scenes.FactoryId, new(Scenes.Factory, new(0, 0, 0)) },
 		{ Scenes.CustomsId, new(Scenes.Customs, new(-899.999f, 0f, 799.9879f)) },
@@ -59,17 +61,35 @@ public class Plugin : BaseUnityPlugin
 		{ Scenes.GroundZeroId, new(Scenes.GroundZero, new(-2682.517f, -15.2285f, -1985.849f)) },
 	};
 
-	public string DisabledObjectsDataPath;
+	public static Plugin Instance;
 
-	public Dictionary<string, Dictionary<string, List<List<int>>>> DisabledObjectsData;
-	public HashSet<Transform> DisabledObjects;
-	public Dictionary<string, Vector3> SceneOffsetTable;
+	public static ConfigEntry<bool> SpawnCustoms;
+	public static ConfigEntry<bool> SpawnReserve;
+	public static ConfigEntry<bool> SpawnLighthouse;
+	public static ConfigEntry<bool> SpawnShoreline;
+	public static ConfigEntry<bool> SpawnInterchange;
+	public static ConfigEntry<bool> SpawnStreets;
+	public static ConfigEntry<bool> SpawnGroundZero;
 
-	public ScenesPreset OpenWorldScenesPreset;
+	private string DisabledObjectsDataPath;
+
+	private Dictionary<string, Dictionary<string, List<List<int>>>> DisabledObjectsData;
+	private HashSet<Transform> DisabledObjects;
+	private Dictionary<string, Vector3> SceneOffsetTable;
+
+	private ScenesPreset OpenWorldScenesPreset;
 
     private void Awake()
 	{
 		Instance = this;
+
+		SpawnCustoms = Config.Bind<bool>("Maps", "Customs", true);
+		SpawnReserve = Config.Bind<bool>("Maps", "Reserve", true);
+		SpawnLighthouse = Config.Bind<bool>("Maps", "Lighthouse", true);
+		SpawnShoreline = Config.Bind<bool>("Maps", "Shoreline", true);
+		SpawnInterchange = Config.Bind<bool>("Maps", "Interchange", true);
+		SpawnStreets = Config.Bind<bool>("Maps", "Streets", true);
+		SpawnGroundZero = Config.Bind<bool>("Maps", "GroundZero", true);
 
 		var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 		DisabledObjectsDataPath = Path.Combine(assemblyDir, "data", "disabled-objects.jsonc");
@@ -99,7 +119,7 @@ public class Plugin : BaseUnityPlugin
 		var oldLocations = LocationSettings.Location.AvailableMaps;
 		var newLocations = new string[oldLocations.Length + 1];
 		Array.Copy(oldLocations, newLocations, oldLocations.Length);
-		newLocations[oldLocations.Length] = "7bpencil.openworld";
+		newLocations[oldLocations.Length] = MapKey;
 
 		typeof(LocationSettings.Location)
 			.GetField(nameof(LocationSettings.Location.AvailableMaps), BindingFlags.Static | BindingFlags.Public)
@@ -107,32 +127,7 @@ public class Plugin : BaseUnityPlugin
 
 		OpenWorldScenesPreset = ScriptableObject.CreateInstance<ScenesPreset>();
 		OpenWorldScenesPreset.ChildPresets = [];
-
-		string[] start =
-		[
-			"Assets/Content/Locations/Woods/woods_Scripts.unity",
-			"Assets/Content/Locations/Woods/woods_terrain.unity",
-			"Assets/Content/Locations/Woods/woods_combined.unity",
-		];
-		string[] end =
-		[
-			"Assets/Content/Locations/Woods/woods_DesignMain.unity",
-			"Assets/Content/Locations/Woods/woods_AI.unity",
-			"Assets/Content/Locations/Woods/Woods_Sound.unity",
-		];
-
-		var scenes = new List<string>();
-		scenes.AddRange(start);
-		scenes.AddRange(Scenes.Customs);
-		scenes.AddRange(Scenes.Reserve);
-		scenes.AddRange(Scenes.Lighthouse);
-		scenes.AddRange(Scenes.Shoreline);
-		scenes.AddRange(Scenes.Interchange);
-		scenes.AddRange(Scenes.Streets);
-		scenes.AddRange(Scenes.GroundZero);
-		scenes.AddRange(end);
-
-		OpenWorldScenesPreset._scenesResourceKeys = ConvertScenesList(scenes);
+		OpenWorldScenesPreset._scenesResourceKeys = [];
 
 		new Patch_GraphicsSettingsGroup().Enable();
 		new Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync().Enable();
@@ -140,16 +135,47 @@ public class Plugin : BaseUnityPlugin
 		new Patch_LocalClientTriggersModule_Awake().Enable();
 	}
 
-	// this works only for vanilla scenes,
-	// custom scenes can have different path and rcid
-	public static List<SceneResourceKey> ConvertScenesList(List<string> scenes)
+	public static readonly HashSet<string> StartScenes = new()
 	{
-		var result = new List<SceneResourceKey>(scenes.Count);
-		foreach (var scene in scenes)
+		"Assets/Content/Locations/Woods/woods_Scripts.unity",
+		"Assets/Content/Locations/Woods/woods_terrain.unity",
+		"Assets/Content/Locations/Woods/woods_combined.unity",
+	};
+	public static readonly HashSet<string> EndScenes = new()
+	{
+		"Assets/Content/Locations/Woods/woods_DesignMain.unity",
+		"Assets/Content/Locations/Woods/woods_AI.unity",
+		"Assets/Content/Locations/Woods/Woods_Sound.unity",
+	};
+
+	public ScenesPreset GetOpenWorldMapScenesList()
+	{
+		var scenes = OpenWorldScenesPreset._scenesResourceKeys;
+		scenes.Clear();
+
+		AddScenesList(StartScenes, scenes);
+
+		if (SpawnCustoms.Value) AddScenesList(Scenes.Customs, scenes);
+		if (SpawnReserve.Value) AddScenesList(Scenes.Reserve, scenes);
+		if (SpawnLighthouse.Value) AddScenesList(Scenes.Lighthouse, scenes);
+		if (SpawnShoreline.Value) AddScenesList(Scenes.Shoreline, scenes);
+		if (SpawnInterchange.Value) AddScenesList(Scenes.Interchange, scenes);
+		if (SpawnStreets.Value) AddScenesList(Scenes.Streets, scenes);
+		if (SpawnGroundZero.Value) AddScenesList(Scenes.GroundZero, scenes);
+
+		AddScenesList(EndScenes, scenes);
+
+		return OpenWorldScenesPreset;
+	}
+
+	// this works only for scenes from vanilla maps,
+	// custom maps scenes can have different path and rcid
+	public static void AddScenesList(HashSet<string> scenesList, List<SceneResourceKey> target)
+	{
+		foreach (var scene in scenesList)
 		{
-			result.Add(new() { path = scene, rcid = scene });
+			target.Add(new() { path = scene, rcid = scene });
 		}
-		return result;
 	}
 
 #if DEBUG
@@ -528,7 +554,7 @@ public class Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync : Mod
 		__instance._scenesLoaded = 0f;
 		__instance._progress?.Report(0f);
 
-		var scenesPreset = Plugin.Instance.OpenWorldScenesPreset;
+		var scenesPreset = Plugin.Instance.GetOpenWorldMapScenesList();
 
 		scenesPreset.DisableServerScenes(preset.DisableServerScenes);
 		__instance._totalScenesToLoad = scenesPreset.ScenesResourceKeys.Length;
