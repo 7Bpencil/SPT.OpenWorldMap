@@ -384,6 +384,9 @@ public class Plugin : BaseUnityPlugin
 		}
 	}
 
+	// TODO this is only needed for good looking freecam views,
+	// so objects and terrain do not dissapear at distance,
+	// and should not be used in normal gameplay
     public void DisableAllCullingObjects()
     {
         foreach (var cullingObject in FindObjectsOfType<DisablerCullingObjectBase>())
@@ -392,6 +395,7 @@ public class Plugin : BaseUnityPlugin
             {
 	            cullingObject.SetComponentsEnabled(true);
             }
+			cullingObject.OnDestroy();
         }
 		foreach (var perfectCullingAdaptiveGrid in FindObjectsOfType<PerfectCullingAdaptiveGrid>())
         {
