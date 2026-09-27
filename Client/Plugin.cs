@@ -137,6 +137,7 @@ public class Plugin : BaseUnityPlugin
 		new Patch_GraphicsSettingsGroup().Enable();
 		new Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync().Enable();
 		new Patch_BotDoorsController_RefreshData().Enable();
+		new Patch_LocalClientTriggersModule_Awake().Enable();
 	}
 
 	// this works only for vanilla scenes,
@@ -558,6 +559,28 @@ public class Patch_BotDoorsController_RefreshData : ModulePatch
 		{
 			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
 			{
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+public class Patch_LocalClientTriggersModule_Awake : ModulePatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return AccessTools.Method(typeof(LocalClientTriggersModule), nameof(LocalClientTriggersModule.Awake));
+    }
+
+    [PatchPrefix]
+    public static bool Prefix(ref Dictionary<string, WorldInteractiveObject> ____worldInteractiveObjects)
+	{
+		if (TarkovApplication.Exist(out var tarkovApplication))
+		{
+			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
+			{
+				____worldInteractiveObjects = [];
 				return false;
 			}
 		}
