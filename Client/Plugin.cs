@@ -46,20 +46,17 @@ public class Plugin : BaseUnityPlugin
 
 	public static Plugin Instance;
 
-	// WoodsOffset, I first got all offsets relative to Customs, but Woods is easier to work with
-	private static readonly Vector3 WO = new(-899.999f, 0f, 799.9879f);
-
 	private Dictionary<string, MapData> Maps = new()
 	{
 		{ Scenes.FactoryId, new(Scenes.Factory, new(0, 0, 0)) },
-		{ Scenes.CustomsId, new(Scenes.Customs, WO) },
-		{ Scenes.ReserveId, new(Scenes.Reserve, new Vector3(802.4879f, 0, 477.2278f) + WO) },
-		{ Scenes.LighthouseId, new(Scenes.Lighthouse, new Vector3(921.452f, -38.4145f, -691.3636f) - new Vector3(-804.424f, 27.2299f, -1737.131f) + WO) },
-		{ Scenes.ShorelineId, new(Scenes.Shoreline, new Vector3(1162.224f, -92.2317f, 1436.709f) - new Vector3(226.3479f, -92.2346f, 338.9418f) + WO) },
-		{ Scenes.InterchangeId, new(Scenes.Interchange, new Vector3(-596.6475f, 19.7394f, -740.3831f) - new Vector3(13.1f, 21.43f, -54.5f) + WO) },
+		{ Scenes.CustomsId, new(Scenes.Customs, new(-899.999f, 0f, 799.9879f)) },
+		{ Scenes.ReserveId, new(Scenes.Reserve, new(-97.51111f, 0f, 1277.216f)) },
+		{ Scenes.LighthouseId, new(Scenes.Lighthouse, new(825.877f, -65.6444f, 1845.755f)) },
+		{ Scenes.ShorelineId, new(Scenes.Shoreline, new(35.87708f, 0.00289917f, 1897.755f)) },
+		{ Scenes.InterchangeId, new(Scenes.Interchange, new(-1509.747f, -15.95461f, -147.6376f)) },
 		{ Scenes.WoodsId, new(Scenes.Woods, new(0, 0, 0)) },
-		{ Scenes.StreetsId, new(Scenes.Streets, new Vector3(-840.5616f, 5.0597f, -2238.547f) - new Vector3(-57.7054f, 5.0597f, 581.6671f) + WO) },
-		{ Scenes.GroundZeroId, new(Scenes.GroundZero, new Vector3(-1782.518f, -15.2285f, -2785.837f) + WO) },
+		{ Scenes.StreetsId, new(Scenes.Streets, new(-1682.855f, 0f, -2020.226f)) },
+		{ Scenes.GroundZeroId, new(Scenes.GroundZero, new(-2682.517f, -15.2285f, -1985.849f)) },
 	};
 
 	public string DisabledObjectsDataPath;
@@ -81,7 +78,7 @@ public class Plugin : BaseUnityPlugin
 		DisabledObjects = new();
 
 		SceneOffsetTable = new();
-		foreach (var mapData in Maps.Values)
+		foreach (var (mapId, mapData) in Maps)
 		{
 			foreach (var scene in mapData.AllowedScenes)
 			{
