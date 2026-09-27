@@ -133,6 +133,7 @@ public class Plugin : BaseUnityPlugin
 		new Patch_LoadScenesFromPresetOperation_LoadPresetFromConfigAsync().Enable();
 		new Patch_BotDoorsController_RefreshData().Enable();
 		new Patch_LocalClientTriggersModule_Awake().Enable();
+		new Patch_DistantShadow_Awake().Enable();
 	}
 
 	public static readonly HashSet<string> StartScenes = new()
@@ -607,6 +608,30 @@ public class Patch_LocalClientTriggersModule_Awake : ModulePatch
 			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
 			{
 				____worldInteractiveObjects = [];
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+// for some reason distant shadow captures terrain quad,
+// which creates giant ugly non-sensical shadow
+public class Patch_DistantShadow_Awake : ModulePatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return AccessTools.Method(typeof(DistantShadow), nameof(DistantShadow.Awake));
+    }
+
+    [PatchPrefix]
+    public static bool Prefix(DistantShadow __instance)
+	{
+		if (TarkovApplication.Exist(out var tarkovApplication))
+		{
+			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
+			{
+				__instance.gameObject.SetActive(false);
 				return false;
 			}
 		}
