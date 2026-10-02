@@ -179,6 +179,11 @@ public class Plugin : BaseUnityPlugin
 		}
 	}
 
+	public bool IsOnOpenWorldMap()
+	{
+		return TarkovApplication.Exist(out var tarkovApplication) && tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == MapScenePath;
+	}
+
 #if DEBUG
 	public void DisabledObjectsAdd(GameObject go)
 	{
@@ -582,14 +587,7 @@ public class Patch_BotDoorsController_RefreshData : ModulePatch
     [PatchPrefix]
     public static bool Prefix()
 	{
-		if (TarkovApplication.Exist(out var tarkovApplication))
-		{
-			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
-			{
-				return false;
-			}
-		}
-		return true;
+		return !Plugin.Instance.IsOnOpenWorldMap();
 	}
 }
 
@@ -603,13 +601,10 @@ public class Patch_LocalClientTriggersModule_Awake : ModulePatch
     [PatchPrefix]
     public static bool Prefix(ref Dictionary<string, WorldInteractiveObject> ____worldInteractiveObjects)
 	{
-		if (TarkovApplication.Exist(out var tarkovApplication))
+		if (Plugin.Instance.IsOnOpenWorldMap())
 		{
-			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
-			{
-				____worldInteractiveObjects = [];
-				return false;
-			}
+			____worldInteractiveObjects = [];
+			return false;
 		}
 		return true;
 	}
@@ -627,13 +622,10 @@ public class Patch_DistantShadow_Awake : ModulePatch
     [PatchPrefix]
     public static bool Prefix(DistantShadow __instance)
 	{
-		if (TarkovApplication.Exist(out var tarkovApplication))
+		if (Plugin.Instance.IsOnOpenWorldMap())
 		{
-			if (tarkovApplication.CurrentRaidSettings.SelectedLocation.Scene.path == Plugin.MapScenePath)
-			{
-				__instance.gameObject.SetActive(false);
-				return false;
-			}
+			__instance.gameObject.SetActive(false);
+			return false;
 		}
 		return true;
 	}
